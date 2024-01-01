@@ -24,6 +24,7 @@ def predict():
     
     result =  model_prediction(query)
     
+    print(type(result))
     # Converting np array into list and jsonifying it 
     return jsonify(array=result.tolist())
 

@@ -9,3 +9,6 @@ docs/_build/
 dist/
 venv/
 env/
+saved_model.pb
+Battery_model
+*.npy
