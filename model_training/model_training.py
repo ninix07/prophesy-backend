@@ -40,7 +40,7 @@ class ModelTraining:
             self.__MINMAX_SCALAR_PATH = self.__RESOURCESS_PATH.joinpath(OUTPUT_SCALER_NAME)
             self.__DATA_INDEX_FILE_PATH = self.__RESOURCESS_PATH.joinpath(DATA_INDEX_FILE_NAME)
             
-            self.__data_index = 0
+            self.data_index = 0
             if not os.path.exists(self.__RESOURCESS_PATH):
                 print(f"The path {self.__RESOURCESS_PATH} doesn't exits so creating it.")
                 os.mkdir(self.__RESOURCESS_PATH)
@@ -49,7 +49,7 @@ class ModelTraining:
                 loaded_scaler = np.load(self.__MINMAX_SCALAR_PATH, allow_pickle=True)
                 self.output_scaler = loaded_scaler.item()
                 with open(self.__DATA_INDEX_FILE_PATH, 'r') as f:
-                    self.__data_index = int(f.read())
+                    self.data_index = int(f.read())
             else:
                 self.Battery_model = tf.keras.Sequential()
                 self.Battery_model.add(tf.keras.layers.BatchNormalization())
@@ -76,20 +76,22 @@ class ModelTraining:
             # Importing data in chunks of 1000
             chunksize = DATA_CHUNKS
             data_shape_1 = log_data.shape[0]
-            if data_shape_1 < DATA_CHUNKS and self.__data_index == 0:
+            if data_shape_1 < DATA_CHUNKS and self.data_index == 0:
                 chunksize = data_shape_1
 
-            if self.__data_index != 0 and (data_shape_1 - self.__data_index) < DATA_CHUNKS:
+            if self.data_index != 0 and (data_shape_1 - self.data_index) < DATA_CHUNKS:
                 time.sleep(POLLING_INTERVAL)
                 continue
 
             file_chunks = pd.read_csv(BATTERY_LOG_PATH, skiprows=range(
-                0, self.__data_index), chunksize=chunksize)
+                0, self.data_index), chunksize=chunksize)
             #
             for chunk in file_chunks:
+                chunk.columns = headerList
                 try:
                     self.__model_fitting(datas=chunk)
                 except Exception as e:
+                    print(e)
                     time.sleep(POLLING_INTERVAL)
 
 
@@ -112,7 +114,7 @@ class ModelTraining:
 
         self.Battery_model.save(self.__BATTERY_MODEL_PATH)
         np.save(self.__MINMAX_SCALAR_PATH, self.output_scaler, allow_pickle=True)
-        self.__data_index += datas.shape[0]
+        self.data_index += datas.shape[0]
 
         with open(self.__DATA_INDEX_FILE_PATH, 'w') as f:
-            f.write(str(self.__data_index))
+            f.write(str(self.data_index))
