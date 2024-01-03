@@ -1,1 +1,0 @@
-from .model_prediction import update_model_and_scaler
