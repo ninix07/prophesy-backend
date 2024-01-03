@@ -44,6 +44,8 @@ class ModelTraining:
             if not os.path.exists(self.__RESOURCESS_PATH):
                 print(f"The path {self.__RESOURCESS_PATH} doesn't exits so creating it.")
                 os.mkdir(self.__RESOURCESS_PATH)
+            self.__early_stopping = EarlyStopping(
+                    monitor='val_loss', patience=5, restore_best_weights=True)
             if os.path.exists(self.__BATTERY_MODEL_PATH):
                 self.Battery_model = load_model(self.__BATTERY_MODEL_PATH)
                 loaded_scaler = np.load(self.__MINMAX_SCALAR_PATH, allow_pickle=True)
@@ -61,8 +63,6 @@ class ModelTraining:
                 self.Battery_model.add(tf.keras.layers.Dense(
                     1, activation='linear', trainable=True))
                 self.Battery_model.compile(optimizer='adam', loss='mean_squared_error')
-                self.__early_stopping = EarlyStopping(
-                    monitor='val_loss', patience=5, restore_best_weights=True)
                 self.output_scaler = MinMaxScaler(feature_range=(-1, 1))
     def model_training(self):
         # Checking headers in csv if not adding a headers
