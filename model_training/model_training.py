@@ -32,7 +32,6 @@ class ModelTraining:
                 "Object already created please use get_instance method")
         else:
             ModelTraining.__instance = self
-            self.output_scaler = MinMaxScaler(feature_range=(-1, 1))
             self.__MODEL_TRAINING_FILE_PATH = Path(__file__)
             self.__RESOURCESS_PATH = self.__MODEL_TRAINING_FILE_PATH.parents[1].joinpath(
                 RESOURCES_FOLDER_NAME)
@@ -64,7 +63,7 @@ class ModelTraining:
                 self.Battery_model.compile(optimizer='adam', loss='mean_squared_error')
                 self.__early_stopping = EarlyStopping(
                     monitor='val_loss', patience=5, restore_best_weights=True)
-                output_scaler = MinMaxScaler(feature_range=(-1, 1))
+                self.output_scaler = MinMaxScaler(feature_range=(-1, 1))
     def model_training(self):
         # Checking headers in csv if not adding a headers
         log_data = pd.read_csv(BATTERY_LOG_PATH)
