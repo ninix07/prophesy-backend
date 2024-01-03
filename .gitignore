@@ -12,3 +12,4 @@ env/
 saved_model.pb
 resources/*
 *.npy
+Battery_model
