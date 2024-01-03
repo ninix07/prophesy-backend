@@ -19,8 +19,9 @@ def hello_world():
 def predict():
     # Serializing query into list of list of floats
     query =ast.literal_eval(request.args.get("x_log"))
+    model_to_use=request.args.get("method")
     
-    result =  model_prediction(query)
+    result =  model_prediction(query, model_to_use)
     
     print(type(result))
     # Converting np array into list and jsonifying it 
