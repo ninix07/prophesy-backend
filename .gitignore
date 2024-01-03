@@ -9,6 +9,7 @@ docs/_build/
 dist/
 venv/
 env/
+backend/
 saved_model.pb
 resources/*
 *.npy
