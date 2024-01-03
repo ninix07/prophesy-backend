@@ -1,7 +1,10 @@
 BATTERY_LOG_PATH = '../battery-data-logger/battery_log.csv'
+BATTERY_HISTORY_PATH="../battery-data-analysis/assets/battery-history-csvs/batteryreport.csv"
 POLLING_INTERVAL = 30.0
 DATA_CHUNKS: int = 1000
 RESOURCES_FOLDER_NAME = "resources"
+LINEAR_REGRESSION_MODEL_FOLDER_NAME="linear"
+LINEAR_REGRESSION_MODEL_NAME="Battery_linear_regression_model"
 MODEL_FOLDER_NAME = "battery_model"
 OUTPUT_SCALER_NAME = "output_scaler.npy"
 DATA_INDEX_FILE_NAME = "data_index.txt"
